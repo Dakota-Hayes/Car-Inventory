@@ -47,3 +47,43 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return f'User {self.email} has been added to the database'
+
+class Car(db.Model):
+    id = db.Column(db.String, primary_key=True)
+    make = db.Column(db.String(150), nullable=True, default='')
+    model = db.Column(db.String(150), nullable = True, default = '')
+    year = db.Column(db.Integer, nullable = True, default = 0000)
+    color = db.Column(db.String(150), nullable = True, default = '')
+    date_created = db.Column(db.DateTime, nullable = False, default = datetime.utcnow)
+
+    def __init__(self, make, model='', year=0000, color=''):
+        self.id = self.set_id()
+        self.make = make
+        self.model = model
+        self.year = year
+        self.color = color
+
+    def set_id(self):
+        return str(uuid.uuid4())
+    
+    def set_make(self, make):
+        self.make = make
+
+    def set_model(self, model):
+        self.model = model
+
+    def set_year(self, year):
+        self.year = year
+    
+    def set_color(self, color):
+        self.color = color
+
+    def __repr__(self):
+        return f'Car {self.year} {self.model} {self.make} has been added to the database'
+
+class CarSchema(ma.Schema):
+    class Meta:
+        fields = ['id', 'make','model','year', 'color']
+
+car_schema = CarSchema()
+cars_schema = CarSchema(many=True)
